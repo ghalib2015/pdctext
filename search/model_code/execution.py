@@ -91,18 +91,27 @@ def jaccard_search(query, if_access, tokens_access, threshold, stop_words, stemm
     return articles
 
 
-def word2vec_search(model, query, stop_words, stemmer, limit, if_access, threshold, k=3, all=0):
+def word2vec_search(model, query, stop_words, stemmer, limit, if_access, threshold, k=3, all=0, weight=1):
     query = re.sub(r'[^\w]', ' ', query)
     tokens = word_tokenize(re.sub(r"\d+", "", query.lower()))
     tokens = [w for w in tokens if w not in stop_words]
     tokens = set([stemmer.stem(w) for w in tokens])
     results = set(model.wv.most_similar(positive=tokens, topn=limit))
+    result = set()
     for word, score in results:
         if score >= threshold:
-            tokens.add(word)
-    print(tokens)
-    list = [dict(ast.literal_eval(access_line("if.csv", if_access[token]))) for token in tokens if
+            print(word, ": ", score)
+            if word not in tokens:
+                result.add(word)
+    list1 = []
+    for token in tokens:
+        if token in if_access.keys():
+            d = dict(ast.literal_eval(access_line("if.csv", if_access[token])))
+            d.update((x, y*weight) for x, y in d.items())
+            list1.append(d)
+    list = [dict(ast.literal_eval(access_line("if.csv", if_access[token]))) for token in result if
             token in if_access.keys()]
+    list.extend(list1)
     return ta(list, k, all)
 
 
