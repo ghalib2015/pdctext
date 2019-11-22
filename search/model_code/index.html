@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Search engine</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/nouislider.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/util.css">
+	<link rel="stylesheet" type="text/css" href="/static/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+
+
+	<div class="container-contact100">
+		<div class="wrap-contact100">
+			<form class="contact100-form validate-form" action="." method="POST">
+				<span class="contact100-form-title">
+					Search engine
+				</span>
+
+				<div class="wrap-input100 validate-input bg1" data-validate="Enter a query">
+					<span class="label-input100" style='font-size:20px;'>Query</span>
+					<input class="input100" type="text" name="query" placeholder="Enter your query" style='font-size:30px;' required="required">
+				</div>
+
+				<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter a value" style="width:200px;">
+					<span class="label-input100" style='font-size:14px;'>Number of results</span>
+					<input class="input100" type="number" name="topk" min="1" placeholder="3" style='font-size:50px;' required="required">
+				</div>
+
+				<div class="wrap-input100 input100-select bg1">
+					<span class="label-input100" style='font-size:18px;'>Search method</span>
+					<div>
+						<select class="js-select2" name="method">
+							<option>Simple search</option>
+							<option>See also</option>
+							<option>Search instead</option>
+						</select>
+						<div class="dropDownSelect2"></div>
+					</div>
+				</div>
+
+				<div class="w-full dis-none js-show-service">
+					<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter a value" style="width:200px;">
+					<span class="label-input100" style='font-size:14px;'>Additional results</span>
+					<input class="input100" type="number" name="limit" min="1" placeholder="1" style='font-size:50px;'>
+					</div>
+					<div class="wrap-input100 bg1 rs1-wrap-input100" style="width:200px;">
+					<span class="label-input100" style='font-size:14px;'>Threshold</span>
+					<input class="input100" type="number" name="threshold" min="0" max="1" step="0.001" placeholder="0.0" style='font-size:50px;'>
+					</div>
+					<div class="wrap-input100 validate-input bg1 rs1-wrap-input100" data-validate = "Enter a value" style="width:200px;">
+					<span class="label-input100" style='font-size:14px;'>Weight (for search instead)</span>
+					<input class="input100" type="number" name="weight" min="1" placeholder="1" style='font-size:50px;'>
+					</div>
+				</div>
+
+				<div class="wrap-input100 validate-input bg0 rs1-alert-validate" data-validate = "Select a type">
+
+					<div class="wrap-contact100-form-radio">
+						<span class="label-input100" style='font-size:20px;'>What type of results you want ?</span>
+
+						<div class="contact100-form-radio m-t-15">
+							<input class="input-radio100" id="radio1" type="radio" name="type-product" value="all" checked="checked">
+							<label class="label-radio100" for="radio1">
+								All the results
+							</label>
+						</div>
+
+						<div class="contact100-form-radio">
+							<input class="input-radio100" id="radio2" type="radio" name="type-product" value="verbatim">
+							<label class="label-radio100" for="radio2">
+								All the terms
+							</label>
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="container-contact100-form-btn">
+					<button class="contact100-form-btn">
+						<span style="text-align:center; font-size:26px; padding:10px;">
+							Search
+							<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+						</span>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+
+<!--===============================================================================================-->
+	<script src="/static/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/static/select2.min.js"></script>
+	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+
+
+			$(".js-select2").each(function(){
+				$(this).on('select2:close', function (e){
+					if($(this).val() == "Please chooses") {
+						$('.js-show-service').slideUp();
+					}
+					else {
+						$('.js-show-service').slideUp();
+						$('.js-show-service').slideDown();
+					}
+				});
+			});
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="/static/nouislider.min.js"></script>
+	<script>
+	    var filterBar = document.getElementById('filter-bar');
+
+	    noUiSlider.create(filterBar, {
+	        start: [ 1500, 3900 ],
+	        connect: true,
+	        range: {
+	            'min': 1500,
+	            'max': 7500
+	        }
+	    });
+
+	    var skipValues = [
+	    document.getElementById('value-lower'),
+	    document.getElementById('value-upper')
+	    ];
+
+	    filterBar.noUiSlider.on('update', function( values, handle ) {
+	        skipValues[handle].innerHTML = Math.round(values[handle]);
+	        $('.contact100-form-range-value input[name="from-value"]').val($('#value-lower').html());
+	        $('.contact100-form-range-value input[name="to-value"]').val($('#value-upper').html());
+	    });
+	</script>
+<!--===============================================================================================-->
+
+
+</body>
+</html>
