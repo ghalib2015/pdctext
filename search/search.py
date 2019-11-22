@@ -58,8 +58,9 @@ def text_box():
                 jaccard_search(query, if_access, tokens_access, threshold, stop_words, stemmer, topk, all, limit),
                 articles_list)
         else:
+            weight = int(request.form['weight'])
             results = load_articles(
-                word2vec_search(model, query, stop_words, stemmer, limit, if_access, threshold, topk, all), articles_list)
+                word2vec_search(model, query, stop_words, stemmer, limit, if_access, threshold, topk, all, weight), articles_list)
 
     return render_template("results.html", message=Markup(results))
 
